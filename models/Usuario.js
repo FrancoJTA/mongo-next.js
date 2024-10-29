@@ -32,4 +32,4 @@ const UsarioSchema = mongoose.Schema({
     }
 })
 
-module.exports =  mongoose.models("Usuario", UsarioSchema);
+module.exports =  mongoose.model("Usuario", UsarioSchema);
