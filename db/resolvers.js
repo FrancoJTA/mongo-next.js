@@ -2,10 +2,18 @@ const Usuario = require("../models/Usuario");
 const bcrypt = require('bcryptjs');
 
 require("dotenv").config({path:'variables.env'});
+const jwt = require("jsonwebtoken");
+
+const crearToken = (usuario,palabrasecreta,expiresIn) => {
+    const {id,nombre,apellido,email,created} = usuario;
+    return jwt.sign({id,nombre,apellido,email,created},palabrasecreta,{expiresIn});
+}
 
 const resolvers = {
     Query: {
-        obtenerCurso:()=>'Bienvenido Estudiantes de Base de Datos III',
+        ObtenerUsuario: async (_,{token})=>{
+            return  jwt.verify(token,process.env.FIRMA_SECRETA);
+        }
     },
 
     Mutation: {
@@ -42,7 +50,7 @@ const resolvers = {
             }
 
             return {
-                token:creartoken(existeUsuario,process.env.FIRMA_SECRET,'24')
+                token:crearToken(existeUsuario,process.env.FIRMA_SECRETA,'3600000')
             }
         }
     }
